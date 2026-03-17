@@ -1,1 +1,162 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — LUXE</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .about-hero {
+      padding: 120px 48px 100px; text-align:center;
+      background: radial-gradient(ellipse at 50% 30%, rgba(201,169,110,0.07) 0%, transparent 70%);
+      border-bottom: 1px solid var(--border); position:relative; overflow:hidden;
+    }
+    .about-hero::before { content:'LUXE'; position:absolute; font-family:var(--font-display); font-size:300px; font-weight:300; color:rgba(201,169,110,0.03); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; white-space:nowrap; }
+    .hero-eyebrow { font-size:11px; letter-spacing:4px; color:var(--accent); text-transform:uppercase; margin-bottom:20px; }
+    .about-title { font-family:var(--font-display); font-size:clamp(48px,8vw,110px); font-weight:300; margin-bottom:28px; line-height:1; }
+    .about-sub { color:var(--muted); max-width:560px; margin:0 auto; line-height:1.9; font-size:15px; }
+
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; padding:100px 48px; align-items:center; border-bottom:1px solid var(--border); }
+    .about-text h2 { font-family:var(--font-display); font-size:clamp(32px,4vw,52px); font-weight:300; margin-bottom:24px; }
+    .about-text h2 em { font-style:italic; color:var(--accent); }
+    .about-text p { color:var(--muted); line-height:1.9; margin-bottom:16px; font-size:14px; }
+    .about-img-block { position:relative; }
+    .about-visual {
+      height:480px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      display:flex; align-items:center; justify-content:center; font-size:120px;
+      background:linear-gradient(135deg, #1a1408, #2a1e0a);
+    }
+    .about-visual-tag { position:absolute; bottom:-20px; right:-20px; background:var(--accent); color:#000; padding:20px 24px; border-radius:var(--radius); font-family:var(--font-display); font-size:18px; font-weight:400; }
+
+    .stats-section { padding:80px 48px; border-bottom:1px solid var(--border); }
+    .stats-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:24px; }
+    .stat-card { padding:28px 20px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); text-align:center; transition:var(--transition); }
+    .stat-card:hover { border-color:var(--accent); transform:translateY(-3px); }
+    .stat-number { font-family:var(--font-display); font-size:44px; font-weight:300; color:var(--accent); line-height:1; }
+    .stat-label { font-size:11px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-top:8px; }
+
+    .values-section { padding:80px 48px; border-bottom:1px solid var(--border); }
+    .values-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .value-card { padding:40px 32px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); transition:var(--transition); }
+    .value-card:hover { border-color:var(--accent); }
+    .value-icon { font-size:44px; margin-bottom:20px; }
+    .value-title { font-family:var(--font-display); font-size:28px; font-weight:300; margin-bottom:12px; }
+    .value-desc { color:var(--muted); line-height:1.8; font-size:13px; }
+
+    .team-section { padding:80px 48px; }
+    .team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+    .team-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:40px 28px; text-align:center; transition:var(--transition); }
+    .team-card:hover { border-color:var(--accent); transform:translateY(-4px); }
+    .team-avatar { font-size:60px; margin-bottom:20px; }
+    .team-name { font-family:var(--font-display); font-size:26px; font-weight:300; margin-bottom:6px; }
+    .team-role { font-size:11px; letter-spacing:3px; color:var(--accent); text-transform:uppercase; margin-bottom:16px; }
+    .team-bio { font-size:13px; color:var(--muted); line-height:1.7; }
+
+    @media(max-width:900px) {
+      .about-hero { padding:80px 24px; }
+      .about-grid { grid-template-columns:1fr; padding:60px 24px; gap:40px; }
+      .stats-section, .values-section, .team-section { padding:56px 24px; }
+      .stats-grid { grid-template-columns:repeat(3,1fr); }
+      .values-grid, .team-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-root"></div>
+
+<!-- HERO -->
+<div class="about-hero">
+  <div class="hero-eyebrow">Est. 2018 — Hyderabad, India</div>
+  <h1 class="about-title">Our Story</h1>
+  <p class="about-sub">Founded from a belief that premium quality should be accessible, intentional, and timeless. We source from the world's finest artisans and bring them directly to you.</p>
+</div>
+
+<!-- STORY -->
+<div class="about-grid">
+  <div class="about-text">
+    <h2>Crafted with <em>Purpose</em></h2>
+    <p>Every product in our collection goes through a rigorous curation process. We work directly with artisans and manufacturers who share our commitment to excellence and sustainability.</p>
+    <p>We believe in slow fashion — timeless pieces that last for years, not seasons. Each item is designed to integrate seamlessly into your life and your wardrobe.</p>
+    <p>Our team travels globally to discover unique makers who put craftsmanship above mass production, bringing their finest work directly to you.</p>
+    <a class="btn btn-outline" href="shop.html" style="margin-top:20px">Explore Collection</a>
+  </div>
+  <div class="about-img-block">
+    <div class="about-visual">✦</div>
+    <div class="about-visual-tag">Since 2018</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="section-header">
+    <h2 class="section-title">By the <span>Numbers</span></h2>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-number">12K+</div><div class="stat-label">Happy Customers</div></div>
+    <div class="stat-card"><div class="stat-number">320+</div><div class="stat-label">Products</div></div>
+    <div class="stat-card"><div class="stat-number">48</div><div class="stat-label">Artisan Partners</div></div>
+    <div class="stat-card"><div class="stat-number">99%</div><div class="stat-label">Satisfaction</div></div>
+    <div class="stat-card"><div class="stat-number">18</div><div class="stat-label">Countries</div></div>
+    <div class="stat-card"><div class="stat-number">7yr</div><div class="stat-label">In Business</div></div>
+  </div>
+</div>
+
+<!-- VALUES -->
+<div class="values-section">
+  <div class="section-header"><h2 class="section-title">Our <span>Values</span></h2></div>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="value-icon">🌿</div>
+      <div class="value-title">Sustainability</div>
+      <div class="value-desc">Every sourcing decision considers environmental impact. We partner with certified sustainable suppliers and use eco-friendly packaging.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🤝</div>
+      <div class="value-title">Fair Trade</div>
+      <div class="value-desc">We ensure every artisan and worker in our supply chain is paid fairly and works in safe conditions. No exceptions.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">⏳</div>
+      <div class="value-title">Timelessness</div>
+      <div class="value-desc">We don't follow trends. We curate pieces that will look as beautiful in 10 years as they do today. Quality over quantity, always.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="team-section">
+  <div class="section-header"><h2 class="section-title">Meet the <span>Team</span></h2></div>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">👩‍💼</div>
+      <div class="team-name">Priya Nair</div>
+      <div class="team-role">Founder & CEO</div>
+      <div class="team-bio">Former buyer at Saks Fifth Avenue, Priya launched LUXE after a decade of sourcing premium goods globally.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">👨‍🎨</div>
+      <div class="team-name">Rahul Mehta</div>
+      <div class="team-role">Head of Design</div>
+      <div class="team-bio">Award-winning designer with 12 years in luxury retail. Rahul shapes every visual and product experience at LUXE.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">👩‍💻</div>
+      <div class="team-name">Ananya Singh</div>
+      <div class="team-role">Tech Director</div>
+      <div class="team-bio">Ex-Flipkart engineer, Ananya leads the platform that powers LUXE's seamless shopping experience.</div>
+    </div>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+<div class="toast" id="toast"><span id="toastMsg">Done!</span></div>
+
+<script src="shared.js"></script>
+<script>
+  document.getElementById('nav-root').innerHTML = renderNav('about');
+  document.getElementById('footer-root').innerHTML = renderFooter();
+</script>
+</body>
+</html>
