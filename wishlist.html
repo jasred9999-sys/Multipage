@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wishlist — LUXE</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .wishlist-page { padding: 48px; }
+    .page-title { font-family:var(--font-display); font-size:clamp(36px,5vw,56px); font-weight:300; margin-bottom:8px; }
+    .page-title em { font-style:italic; color:var(--accent); }
+    .page-sub { color:var(--muted); margin-bottom:40px; font-size:14px; }
+    .empty-state { text-align:center; padding:120px 40px; }
+    .empty-icon { font-size:80px; margin-bottom:24px; opacity:0.2; }
+    .empty-title { font-family:var(--font-display); font-size:40px; margin-bottom:12px; }
+    .empty-sub { color:var(--muted); margin-bottom:32px; }
+    .wishlist-actions { display:flex; gap:12px; justify-content:flex-end; margin-bottom:24px; }
+    @media(max-width:600px) { .wishlist-page { padding:24px; } }
+  </style>
+</head>
+<body>
+
+<div id="nav-root"></div>
+
+<div class="wishlist-page">
+  <h1 class="page-title">My <em>Wishlist</em></h1>
+  <p class="page-sub" id="wishCount"></p>
+  <div id="wishlistActions" style="display:none" class="wishlist-actions">
+    <button class="btn btn-outline btn-sm" onclick="clearWishlist()">Clear All</button>
+    <button class="btn btn-primary btn-sm" onclick="addAllToCart()">Add All to Cart</button>
+  </div>
+  <div class="products-grid" id="wishGrid"></div>
+  <div id="emptyState" style="display:none" class="empty-state">
+    <div class="empty-icon">♡</div>
+    <div class="empty-title">Nothing saved yet</div>
+    <div class="empty-sub">Items you heart will appear here</div>
+    <a class="btn btn-primary" href="shop.html">Browse Products</a>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+<div class="toast" id="toast"><span id="toastMsg">Done!</span></div>
+
+<script src="shared.js"></script>
+<script>
+  document.getElementById('nav-root').innerHTML = renderNav('');
+  document.getElementById('footer-root').innerHTML = renderFooter();
+
+  function render() {
+    const ids = getWishlist();
+    const items = PRODUCTS.filter(p => ids.includes(p.id));
+    const count = document.getElementById('wishCount');
+    const grid = document.getElementById('wishGrid');
+    const empty = document.getElementById('emptyState');
+    const actions = document.getElementById('wishlistActions');
+
+    if (items.length === 0) {
+      count.textContent = '';
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      actions.style.display = 'none';
+    } else {
+      count.textContent = `${items.length} saved item${items.length!==1?'s':''}`;
+      grid.innerHTML = items.map(p => productCardHTML(p)).join('');
+      empty.style.display = 'none';
+      actions.style.display = 'flex';
+    }
+  }
+
+  function clearWishlist() {
+    localStorage.removeItem('luxe_wishlist');
+    render();
+    showToast('Wishlist cleared');
+  }
+
+  function addAllToCart() {
+    const ids = getWishlist();
+    const items = PRODUCTS.filter(p => ids.includes(p.id));
+    items.forEach(p => addToCart(p, 1, null, null));
+    showToast(`🛍️ ${items.length} items added to cart!`);
+  }
+
+  render();
+</script>
+</body>
+</html>
