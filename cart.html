@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart — LUXE</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .cart-page { padding: 48px; }
+    .cart-title { font-family:var(--font-display); font-size:clamp(36px,5vw,56px); font-weight:300; margin-bottom:40px; }
+    .cart-title em { font-style:italic; color:var(--accent); }
+
+    .cart-layout { display:grid; grid-template-columns:1fr 360px; gap:40px; align-items:start; }
+    .cart-items { display:flex; flex-direction:column; gap:16px; }
+    .cart-item {
+      display:grid; grid-template-columns:90px 1fr auto;
+      gap:20px; align-items:center;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:20px; transition:var(--transition);
+    }
+    .cart-item:hover { border-color:rgba(201,169,110,0.3); }
+    .cart-item-img { width:90px; height:90px; background:var(--surface); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; font-size:38px; }
+    .cart-item-name { font-family:var(--font-display); font-size:20px; margin-bottom:4px; }
+    .cart-item-variant { font-size:12px; color:var(--muted); letter-spacing:1px; margin-bottom:6px; }
+    .cart-item-price { font-size:18px; color:var(--accent); font-weight:500; }
+    .cart-item-controls { display:flex; align-items:center; gap:14px; margin-top:12px; flex-wrap:wrap; }
+    .qty-ctrl { display:flex; align-items:center; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .qty-btn { background:var(--surface); border:none; color:var(--text); width:36px; height:36px; font-size:16px; cursor:pointer; transition:var(--transition); font-family:var(--font-body); }
+    .qty-btn:hover { background:var(--accent); color:#000; }
+    .qty-val { width:44px; height:36px; background:var(--card); border:none; border-left:1px solid var(--border); border-right:1px solid var(--border); color:var(--text); font-family:var(--font-body); font-size:14px; text-align:center; outline:none; }
+    .cart-remove { background:none; border:none; color:var(--danger); cursor:pointer; font-size:12px; letter-spacing:1px; text-transform:uppercase; padding:0; transition:var(--transition); font-family:var(--font-body); }
+    .cart-remove:hover { opacity:0.7; }
+    .item-subtotal { font-size:13px; color:var(--muted); white-space:nowrap; }
+
+    .cart-summary { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:32px; position:sticky; top:88px; }
+    .summary-title { font-family:var(--font-display); font-size:26px; font-weight:400; margin-bottom:28px; }
+    .coupon-row { display:flex; gap:10px; margin-bottom:20px; }
+    .coupon-input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; color:var(--text); font-family:var(--font-body); font-size:13px; outline:none; transition:var(--transition); }
+    .coupon-input:focus { border-color:var(--accent); }
+    .summary-row { display:flex; justify-content:space-between; padding:10px 0; font-size:14px; border-bottom:1px solid var(--border); }
+    .summary-row:last-of-type { border-bottom:none; }
+    .summary-row.total { font-size:18px; font-weight:500; padding-top:20px; margin-top:8px; border-top:1px solid var(--border); border-bottom:none; }
+    .summary-row.total .val { color:var(--accent); font-size:22px; }
+    .summary-row .free { color:var(--success); }
+
+    .empty-cart { text-align:center; padding:120px 40px; }
+    .empty-icon { font-size:80px; margin-bottom:24px; opacity:0.25; }
+    .empty-title { font-family:var(--font-display); font-size:40px; margin-bottom:12px; }
+    .empty-sub { color:var(--muted); margin-bottom:32px; }
+
+    @media(max-width:900px) {
+      .cart-page { padding:24px; }
+      .cart-layout { grid-template-columns:1fr; }
+      .cart-summary { position:static; }
+      .cart-item { grid-template-columns:70px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-root"></div>
+
+<div class="cart-page">
+  <h1 class="cart-title">Your <em>Cart</em></h1>
+  <div id="cartRoot"></div>
+</div>
+
+<div id="footer-root"></div>
+<div class="toast" id="toast"><span id="toastMsg">Done!</span></div>
+
+<script src="shared.js"></script>
+<script>
+  document.getElementById('nav-root').innerHTML = renderNav('');
+  document.getElementById('footer-root').innerHTML = renderFooter();
+
+  function renderPage() {
+    const cart = getCart();
+    const root = document.getElementById('cartRoot');
+
+    if (cart.length === 0) {
+      root.innerHTML = `
+        <div class="empty-cart">
+          <div class="empty-icon">🛍️</div>
+          <div class="empty-title">Your cart is empty</div>
+          <div class="empty-sub">Looks like you haven't added anything yet.</div>
+          <a class="btn btn-primary" href="shop.html">Start Shopping</a>
+        </div>`;
+      return;
+    }
+
+    const subtotal = getCartTotal();
+    const tax = Math.round(subtotal * 0.18);
+    const total = subtotal + tax;
+    const itemCount = cart.reduce((s,i) => s+i.qty, 0);
+
+    root.innerHTML = `
+      <div class="cart-layout">
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-summary">
+          <div class="summary-title">Order Summary</div>
+          <div class="coupon-row">
+            <input type="text" class="coupon-input" id="couponInput" placeholder="Coupon code…"/>
+            <button class="btn btn-outline btn-sm" onclick="applyCoupon()">Apply</button>
+          </div>
+          <div class="summary-row"><span>Subtotal (${itemCount} item${itemCount!==1?'s':''})</span><span>₹${subtotal.toLocaleString('en-IN')}</span></div>
+          <div class="summary-row"><span>Shipping</span><span class="free">Free</span></div>
+          <div class="summary-row"><span>GST (18%)</span><span>₹${tax.toLocaleString('en-IN')}</span></div>
+          <div class="summary-row total"><span>Total</span><span class="val">₹${total.toLocaleString('en-IN')}</span></div>
+          <a class="btn btn-primary" href="checkout.html" style="width:100%;justify-content:center;margin-top:24px;padding:16px">Checkout →</a>
+          <a class="btn btn-ghost" href="shop.html" style="width:100%;justify-content:center;margin-top:10px">← Continue Shopping</a>
+        </div>
+      </div>`;
+
+    document.getElementById('cartItems').innerHTML = cart.map(item => `
+      <div class="cart-item" id="item-${item.key}">
+        <div class="cart-item-img">${item.emoji}</div>
+        <div>
+          <a class="cart-item-name" href="product.html?id=${item.id}" style="text-decoration:none;color:var(--text)">${item.name}</a>
+          <div class="cart-item-variant">${[item.size, item.color].filter(Boolean).join(' · ') || 'Default'}</div>
+          <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+          <div class="cart-item-controls">
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty('${item.key}',-1)">−</button>
+              <input type="number" class="qty-val" value="${item.qty}" readonly/>
+              <button class="qty-btn" onclick="changeQty('${item.key}',1)">+</button>
+            </div>
+            <button class="cart-remove" onclick="removeItem('${item.key}')">✕ Remove</button>
+          </div>
+        </div>
+        <div class="item-subtotal">₹${item.price.toLocaleString('en-IN')} each</div>
+      </div>`).join('');
+  }
+
+  function removeItem(key) {
+    let cart = getCart();
+    cart = cart.filter(i => i.key !== key);
+    saveCart(cart);
+    renderPage();
+    showToast('Item removed from cart');
+  }
+
+  function changeQty(key, delta) {
+    let cart = getCart();
+    const item = cart.find(i => i.key === key);
+    if (item) {
+      item.qty += delta;
+      if (item.qty <= 0) cart = cart.filter(i => i.key !== key);
+    }
+    saveCart(cart);
+    renderPage();
+  }
+
+  function applyCoupon() {
+    const code = document.getElementById('couponInput')?.value?.trim().toUpperCase();
+    if (code === 'SUMMER40') showToast('🎉 40% discount applied!');
+    else showToast('Invalid coupon code');
+  }
+
+  renderPage();
+</script>
+</body>
+</html>
