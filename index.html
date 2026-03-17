@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LUXE — Premium Store</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    /* ── HERO ── */
+    .hero {
+      height: calc(100vh - 68px);
+      display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
+    }
+    .hero-content {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 64px; position: relative;
+    }
+    .hero-content::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(ellipse at 20% 60%, rgba(201,169,110,0.07) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .hero-eyebrow { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--accent); margin-bottom:24px; }
+    .hero-title { font-family:var(--font-display); font-size:clamp(52px,5vw,82px); font-weight:300; line-height:1.05; margin-bottom:28px; }
+    .hero-title em { font-style:italic; color:var(--accent); }
+    .hero-subtitle { font-size:15px; color:var(--muted); max-width:400px; line-height:1.8; margin-bottom:44px; }
+    .hero-actions { display:flex; gap:16px; align-items:center; }
+    .hero-visual { position:relative; overflow:hidden; background:var(--surface); }
+    .hero-visual-grid { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; height:100%; gap:3px; }
+    .hero-img {
+      background:var(--card); display:flex; align-items:center; justify-content:center;
+      font-size:60px; transition:transform 0.6s ease; position:relative; overflow:hidden;
+    }
+    .hero-img:hover { transform:scale(1.04); }
+    .hero-img:nth-child(1) { background:linear-gradient(135deg,#1e1810,#2c2218); }
+    .hero-img:nth-child(2) { background:linear-gradient(135deg,#0f1a18,#162820); }
+    .hero-img:nth-child(3) { background:linear-gradient(135deg,#18181e,#20202e); }
+    .hero-img:nth-child(4) { background:linear-gradient(135deg,#1a1214,#28181c); }
+    .hero-img-label { position:absolute; bottom:12px; left:12px; font-size:11px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
+
+    section { padding: 80px 48px; }
+
+    /* ── PROMO BANNER ── */
+    .promo-banner {
+      background:linear-gradient(135deg,#1a1408,#2a1e0a);
+      border:1px solid rgba(201,169,110,0.2); border-radius:var(--radius);
+      padding:60px 64px; display:grid; grid-template-columns:1fr auto;
+      align-items:center; gap:40px; position:relative; overflow:hidden;
+    }
+    .promo-banner::before { content:'✦'; position:absolute; right:200px; top:50%; transform:translateY(-50%); font-size:180px; color:rgba(201,169,110,0.04); pointer-events:none; }
+    .promo-tag { font-size:11px; letter-spacing:3px; color:var(--accent); text-transform:uppercase; margin-bottom:16px; }
+    .promo-title { font-family:var(--font-display); font-size:48px; font-weight:300; line-height:1.1; margin-bottom:12px; }
+    .promo-sub { color:var(--muted); max-width:440px; line-height:1.8; }
+
+    /* ── FEATURES ── */
+    .features-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+    .feature-card { padding:32px 28px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); text-align:center; transition:var(--transition); }
+    .feature-card:hover { border-color:var(--accent); transform:translateY(-3px); }
+    .feature-icon { font-size:36px; margin-bottom:16px; }
+    .feature-title { font-family:var(--font-display); font-size:20px; font-weight:400; margin-bottom:8px; }
+    .feature-desc { font-size:13px; color:var(--muted); line-height:1.7; }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:16px 0; background:var(--surface); }
+    .marquee-track { display:flex; gap:64px; animation:marquee 20s linear infinite; white-space:nowrap; }
+    .marquee-track span { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+    .marquee-track .dot { color:var(--accent); }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    @media(max-width:900px) {
+      .hero { grid-template-columns:1fr; }
+      .hero-visual { display:none; }
+      .hero-content { padding:60px 24px; }
+      section { padding:56px 24px; }
+      .features-grid { grid-template-columns:repeat(2,1fr); }
+      .promo-banner { grid-template-columns:1fr; padding:40px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-root"></div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Free Shipping on Orders Over ₹1,999</span><span class="dot">✦</span>
+    <span>New Collection Just Dropped</span><span class="dot">✦</span>
+    <span>Use Code SUMMER40 for 40% Off</span><span class="dot">✦</span>
+    <span>Handcrafted with Love</span><span class="dot">✦</span>
+    <span>30-Day Returns</span><span class="dot">✦</span>
+    <span>Free Shipping on Orders Over ₹1,999</span><span class="dot">✦</span>
+    <span>New Collection Just Dropped</span><span class="dot">✦</span>
+    <span>Use Code SUMMER40 for 40% Off</span><span class="dot">✦</span>
+    <span>Handcrafted with Love</span><span class="dot">✦</span>
+    <span>30-Day Returns</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">New Collection — Spring 2025</div>
+    <h1 class="hero-title">Crafted for<br/><em>Extraordinary</em><br/>Living</h1>
+    <p class="hero-subtitle">Discover a curated selection of premium goods, where every piece tells a story of artisanship and refined taste.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="shop.html">Shop Now</a>
+      <a class="btn btn-ghost" href="about.html">Our Story →</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-visual-grid">
+      <div class="hero-img">🧥<span class="hero-img-label">Outerwear</span></div>
+      <div class="hero-img">💎<span class="hero-img-label">Jewellery</span></div>
+      <div class="hero-img">👟<span class="hero-img-label">Footwear</span></div>
+      <div class="hero-img">🕯️<span class="hero-img-label">Home</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section style="padding-bottom:0">
+  <div class="section-header">
+    <h2 class="section-title">Shop by <span>Category</span></h2>
+  </div>
+  <div class="categories-strip">
+    <a class="category-chip active" href="shop.html">All Products</a>
+    <a class="category-chip" href="shop.html?cat=clothing">Clothing</a>
+    <a class="category-chip" href="shop.html?cat=accessories">Accessories</a>
+    <a class="category-chip" href="shop.html?cat=footwear">Footwear</a>
+    <a class="category-chip" href="shop.html?cat=home">Home & Décor</a>
+    <a class="category-chip" href="shop.html?cat=beauty">Beauty</a>
+    <a class="category-chip" href="shop.html?cat=tech">Tech</a>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section>
+  <div class="section-header">
+    <h2 class="section-title">Featured <span>Picks</span></h2>
+    <a class="btn btn-outline btn-sm" href="shop.html">View All →</a>
+  </div>
+  <div class="products-grid" id="featuredGrid"></div>
+</section>
+
+<!-- PROMO BANNER -->
+<section>
+  <div class="promo-banner">
+    <div>
+      <div class="promo-tag">Limited Time Offer</div>
+      <h2 class="promo-title">Up to 40% Off<br/>Summer Essentials</h2>
+      <p class="promo-sub">Our biggest sale of the year is here. Use code <strong style="color:var(--accent)">SUMMER40</strong> at checkout for 40% off sitewide.</p>
+    </div>
+    <a class="btn btn-primary" href="shop.html">Shop Sale</a>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">🚚</div><div class="feature-title">Free Shipping</div><div class="feature-desc">Complimentary shipping on all orders over ₹1,999.</div></div>
+    <div class="feature-card"><div class="feature-icon">↩️</div><div class="feature-title">Easy Returns</div><div class="feature-desc">30-day hassle-free return policy. No questions asked.</div></div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><div class="feature-title">Secure Checkout</div><div class="feature-desc">Your payment is protected with 256-bit SSL encryption.</div></div>
+    <div class="feature-card"><div class="feature-icon">💬</div><div class="feature-title">24/7 Support</div><div class="feature-desc">Our expert team is always here to help, any time of day.</div></div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<div class="toast" id="toast"><span id="toastMsg">Done!</span></div>
+
+<script src="shared.js"></script>
+<script>
+  document.getElementById('nav-root').innerHTML = renderNav('home');
+  document.getElementById('footer-root').innerHTML = renderFooter();
+  document.getElementById('featuredGrid').innerHTML = PRODUCTS.slice(0,8).map(productCardHTML).join('');
+</script>
+</body>
+</html>
