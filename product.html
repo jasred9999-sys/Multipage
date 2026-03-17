@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product — LUXE</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .product-detail { padding: 48px; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
+
+    .gallery { display:flex; flex-direction:column; gap:12px; }
+    .detail-img-main {
+      height:500px; background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); display:flex; align-items:center;
+      justify-content:center; font-size:120px; transition:var(--transition);
+      overflow:hidden; position:relative;
+    }
+    .detail-img-main .zoom-hint { position:absolute; bottom:12px; right:12px; font-size:11px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
+    .detail-thumbnails { display:flex; gap:10px; }
+    .detail-thumb {
+      width:72px; height:72px; background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); display:flex; align-items:center;
+      justify-content:center; font-size:24px; cursor:pointer; transition:var(--transition);
+    }
+    .detail-thumb:hover, .detail-thumb.active { border-color:var(--accent); }
+
+    .detail-info .detail-category { font-size:11px; letter-spacing:3px; color:var(--accent); text-transform:uppercase; margin-bottom:12px; }
+    .detail-title { font-family:var(--font-display); font-size:48px; font-weight:300; line-height:1.1; margin-bottom:16px; }
+    .detail-rating { display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+    .detail-rating-text { font-size:13px; color:var(--muted); }
+    .detail-price { font-size:36px; font-weight:500; color:var(--accent); margin-bottom:8px; display:flex; align-items:baseline; gap:14px; }
+    .detail-price .old { font-size:20px; color:var(--muted); text-decoration:line-through; }
+    .savings-tag { display:inline-block; background:rgba(224,92,92,0.15); color:var(--danger); font-size:12px; padding:3px 10px; border-radius:2px; margin-bottom:24px; }
+    .detail-desc { color:var(--muted); line-height:1.9; margin-bottom:32px; font-size:14px; }
+
+    .options-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+    .options-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+    .option-chip { padding:8px 20px; border:1px solid var(--border); border-radius:var(--radius); font-size:13px; cursor:pointer; transition:var(--transition); background:var(--surface); color:var(--text); font-family:var(--font-body); }
+    .option-chip:hover, .option-chip.active { border-color:var(--accent); color:var(--accent); }
+
+    .qty-row { display:flex; align-items:center; gap:16px; margin-bottom:32px; }
+    .qty-ctrl { display:flex; align-items:center; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .qty-btn { background:var(--surface); border:none; color:var(--text); width:40px; height:42px; font-size:18px; cursor:pointer; transition:var(--transition); font-family:var(--font-body); }
+    .qty-btn:hover { background:var(--accent); color:#000; }
+    .qty-val { width:52px; height:42px; background:var(--card); border:none; border-left:1px solid var(--border); border-right:1px solid var(--border); color:var(--text); font-family:var(--font-body); font-size:15px; text-align:center; outline:none; }
+    .stock-status { font-size:13px; color:var(--success); display:flex; align-items:center; gap:6px; }
+
+    .detail-actions { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:28px; }
+    .wishlist-btn { background:none; border:1px solid var(--border); padding:12px 20px; border-radius:var(--radius); cursor:pointer; font-size:18px; transition:var(--transition); color:var(--muted); }
+    .wishlist-btn:hover { border-color:var(--danger); color:var(--danger); }
+    .wishlist-btn.wishlisted { border-color:var(--danger); color:var(--danger); background:rgba(224,92,92,0.08); }
+
+    .trust-row { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:32px; }
+    .trust-item { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
+
+    .detail-meta { margin-top:32px; border-top:1px solid var(--border); padding-top:32px; }
+    .meta-tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:24px; }
+    .meta-tab { padding:12px 24px; font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; color:var(--muted); border-bottom:2px solid transparent; transition:var(--transition); background:none; border-top:none; border-left:none; border-right:none; font-family:var(--font-body); }
+    .meta-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+    .detail-meta-row { display:flex; gap:12px; font-size:13px; padding:10px 0; border-bottom:1px solid var(--border); }
+    .detail-meta-label { color:var(--muted); min-width:140px; }
+
+    .related-section { padding:80px 48px 48px; border-top:1px solid var(--border); }
+
+    @media(max-width:900px) {
+      .detail-grid { grid-template-columns:1fr; }
+      .product-detail { padding:24px; }
+      .detail-img-main { height:300px; font-size:80px; }
+      .detail-title { font-size:36px; }
+      .related-section { padding:48px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-root"></div>
+
+<div class="product-detail">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="sep">›</span>
+    <a href="shop.html">Shop</a>
+    <span class="sep">›</span>
+    <span id="breadName">Product</span>
+  </div>
+
+  <div class="detail-grid" id="detailGrid">
+    <!-- Filled by JS -->
+  </div>
+</div>
+
+<!-- Related Products -->
+<div class="related-section">
+  <div class="section-header">
+    <h2 class="section-title">You May Also <span>Like</span></h2>
+  </div>
+  <div class="products-grid" id="relatedGrid"></div>
+</div>
+
+<div id="footer-root"></div>
+<div class="toast" id="toast"><span id="toastMsg">Done!</span></div>
+
+<script src="shared.js"></script>
+<script>
+  document.getElementById('nav-root').innerHTML = renderNav('shop');
+  document.getElementById('footer-root').innerHTML = renderFooter();
+
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get('id'));
+  const product = PRODUCTS.find(p => p.id === id) || PRODUCTS[0];
+  let selectedSize = product.sizes?.[0] || null;
+  let selectedColor = product.colors?.[0] || null;
+  let wishlisted = getWishlist().includes(product.id);
+
+  document.title = `${product.name} — LUXE`;
+  document.getElementById('breadName').textContent = product.name;
+
+  function renderDetail() {
+    const savings = product.oldPrice ? Math.round((1 - product.price/product.oldPrice)*100) : 0;
+    document.getElementById('detailGrid').innerHTML = `
+      <div class="gallery">
+        <div class="detail-img-main">
+          <span>${product.emoji}</span>
+          <span class="zoom-hint">🔍 Hover to zoom</span>
+        </div>
+        <div class="detail-thumbnails">
+          ${[product.emoji,product.emoji,product.emoji].map((e,i) => `
+            <div class="detail-thumb ${i===0?'active':''}" onclick="selectThumb(this)">${e}</div>`).join('')}
+        </div>
+      </div>
+
+      <div class="detail-info">
+        <div class="detail-category">${product.category}</div>
+        <h1 class="detail-title">${product.name}</h1>
+        <div class="detail-rating">
+          <div>${renderStars(product.rating)}</div>
+          <span class="detail-rating-text">${product.rating}.0 — ${product.reviews} reviews</span>
+        </div>
+        <div class="detail-price">
+          ₹${product.price.toLocaleString('en-IN')}
+          ${product.oldPrice ? `<span class="old">₹${product.oldPrice.toLocaleString('en-IN')}</span>` : ''}
+        </div>
+        ${savings ? `<div class="savings-tag">You save ${savings}% (₹${(product.oldPrice-product.price).toLocaleString('en-IN')})</div>` : ''}
+        <p class="detail-desc">${product.desc}</p>
+
+        ${product.sizes ? `
+          <div class="options-label">Size — <span style="color:var(--text)">${selectedSize}</span></div>
+          <div class="options-row" id="sizeOptions">
+            ${product.sizes.map(s => `<button class="option-chip ${s===selectedSize?'active':''}" onclick="selectSize('${s}',this)">${s}</button>`).join('')}
+          </div>` : ''}
+
+        ${product.colors ? `
+          <div class="options-label">Color — <span style="color:var(--text)">${selectedColor}</span></div>
+          <div class="options-row" id="colorOptions">
+            ${product.colors.map(c => `<button class="option-chip ${c===selectedColor?'active':''}" onclick="selectColor('${c}',this)">${c}</button>`).join('')}
+          </div>` : ''}
+
+        <div class="qty-row">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <input type="number" class="qty-val" id="qtyInput" value="1" min="1" max="10" readonly/>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <span class="stock-status">✓ In Stock</span>
+        </div>
+
+        <div class="detail-actions">
+          <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="handleAddToCart()">Add to Cart</button>
+          <button class="wishlist-btn ${wishlisted?'wishlisted':''}" id="wishBtn" onclick="handleWishlist()">♡</button>
+        </div>
+
+        <div class="trust-row">
+          <div class="trust-item">🚚 Free shipping over ₹1,999</div>
+          <div class="trust-item">↩️ 30-day returns</div>
+          <div class="trust-item">🔒 Secure payment</div>
+        </div>
+
+        <div class="detail-meta">
+          <div class="meta-tabs">
+            <button class="meta-tab active" onclick="showTab('specs',this)">Specifications</button>
+            <button class="meta-tab" onclick="showTab('shipping',this)">Shipping</button>
+            <button class="meta-tab" onclick="showTab('returns',this)">Returns</button>
+          </div>
+          <div class="tab-content active" id="tab-specs">
+            ${Object.entries(product.meta).map(([k,v]) => `
+              <div class="detail-meta-row">
+                <span class="detail-meta-label">${k}</span>
+                <span>${v}</span>
+              </div>`).join('')}
+          </div>
+          <div class="tab-content" id="tab-shipping">
+            <div class="detail-meta-row"><span class="detail-meta-label">Standard</span><span>Free on orders over ₹1,999 — 5–7 business days</span></div>
+            <div class="detail-meta-row"><span class="detail-meta-label">Express</span><span>₹199 — 2–3 business days</span></div>
+            <div class="detail-meta-row"><span class="detail-meta-label">Same Day</span><span>₹399 — Available in Hyderabad</span></div>
+          </div>
+          <div class="tab-content" id="tab-returns">
+            <div class="detail-meta-row"><span class="detail-meta-label">Policy</span><span>30-day returns from date of delivery</span></div>
+            <div class="detail-meta-row"><span class="detail-meta-label">Condition</span><span>Unused, original packaging</span></div>
+            <div class="detail-meta-row"><span class="detail-meta-label">Process</span><span>Initiate via Contact page or email</span></div>
+            <div class="detail-meta-row"><span class="detail-meta-label">Refund</span><span>Processed within 5–7 business days</span></div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function selectThumb(el) {
+    document.querySelectorAll('.detail-thumb').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function selectSize(s, el) {
+    selectedSize = s;
+    document.querySelectorAll('#sizeOptions .option-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelector('.options-label').innerHTML = `Size — <span style="color:var(--text)">${s}</span>`;
+  }
+  function selectColor(c, el) {
+    selectedColor = c;
+    document.querySelectorAll('#colorOptions .option-chip').forEach(x => x.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function changeQty(d) {
+    const inp = document.getElementById('qtyInput');
+    let v = parseInt(inp.value) + d;
+    inp.value = Math.max(1, Math.min(10, v));
+  }
+  function handleAddToCart() {
+    const qty = parseInt(document.getElementById('qtyInput').value);
+    addToCart(product, qty, selectedSize, selectedColor);
+  }
+  function handleWishlist() {
+    wishlisted = !wishlisted;
+    toggleWishlist(product.id);
+    const btn = document.getElementById('wishBtn');
+    btn.classList.toggle('wishlisted', wishlisted);
+    btn.textContent = wishlisted ? '♥' : '♡';
+  }
+  function showTab(id, el) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.meta-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-'+id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  renderDetail();
+
+  // Related products
+  const related = PRODUCTS.filter(p => p.id !== product.id && p.category === product.category).slice(0,4);
+  const fallback = PRODUCTS.filter(p => p.id !== product.id).slice(0,4);
+  document.getElementById('relatedGrid').innerHTML = (related.length ? related : fallback).map(productCardHTML).join('');
+</script>
+</body>
+</html>
